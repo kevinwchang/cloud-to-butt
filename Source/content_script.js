@@ -2,9 +2,10 @@ var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
         if (mutation.addedNodes) {
             [].slice.call(mutation.addedNodes).forEach(function(node) {
-                walk(node)
+                walk(node);
             });
         }
+        walk(mutation.target);
     });
 });
 
@@ -24,7 +25,7 @@ function walk(node)
   {
     case 1:  // Element
       if (node.tagName.toLowerCase() == "input" || node.tagName.toLowerCase() == "textarea" ||
-      node.classList.contains("ace_editor"))
+          node.classList.contains("ace_editor"))
       {
         return;
       }
@@ -34,7 +35,6 @@ function walk(node)
       while ( child ) 
       {
         next = child.nextSibling;
-        walk(child);
         child = next;
       }
       break;
@@ -51,9 +51,18 @@ function handleText(textNode)
   
   for (var i = 0; i < replacements.length; i++)
   {
-    v = v.replace(replacements[i][0], replacements[i][1]);
+    var rv = v.replace(replacements[i][0], replacements[i][1]);
+    if (rv != v && replacements[i][3] == 1)
+    {
+      replacements[i][3] = 0;
+      var alts = replacements[i][2];
+      for (var j = 0; j < alts.length; j++)
+      {
+        replacements.push([buildRegExp(alts[j]), replacements[i][1], [], 0]);
+      }
+    }
+    v = rv;
   }
-  
   textNode.nodeValue = v;
 }
 
