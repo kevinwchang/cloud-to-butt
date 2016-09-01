@@ -1,11 +1,11 @@
 var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
-        if (mutation.addedNodes) {
+        if (mutation.addedNodes)
+        {
             [].slice.call(mutation.addedNodes).forEach(function(node) {
                 walk(node);
             });
-        }
-        walk(mutation.target);
+        } 
     });
 });
 
@@ -32,9 +32,10 @@ function walk(node)
     case 9:  // Document
     case 11: // Document fragment
       child = node.firstChild;
-      while ( child ) 
+      while (child) 
       {
         next = child.nextSibling;
+        walk(child);
         child = next;
       }
       break;
