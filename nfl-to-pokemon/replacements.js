@@ -1,19 +1,17 @@
-var pokemon_replacements = [
-  ["Dorial Green-Beckham", "MissingNo."],
-  
+var pokemon_replacements = [ 
   ["Antonio Brown", "Dragonite"],
-  ["Julio Jones", "Exeggutor"],
-  ["David Johnson", "Arcanine"],
-  ["Odell Beckham Jr\.?", "Victreebel", ["Beckham Jr\.?", "Beckham"]],
-  ["Todd Gurley", "Charizard"],
-  ["Rob Gronkowski", "Magmar"],
-  ["Ezekiel Elliott", "Gengar"],
-  ["A\.? ?J\.? Green", "Nidoking", ["Green(?! Bay)"]],
-  ["Lamar Miller", "Vileplume"],
-  ["DeAndre Hopkins", "Machamp"],
-  ["Keenan Allen", "Articuno"],
+  ["Julio Jones", "Flareon"],
+  ["David Johnson", "Exeggutor"],
+  ["Odell Beckham( Jr\.?)?", "Arcanine", "O\. Beckham Jr\.", ["Beckham Jr\.?", "Beckham"]],
+  ["Todd Gurley", "Victreebel"],
+  ["Rob Gronkowski", "Charizard"],
+  ["Ezekiel Elliott", "Magmar"],
+  ["A\.? ?J\.? Green", "Gengar", "A\. Green", ["Green(?! Bay)"]],
+  ["Lamar Miller", "Nidoking"],
+  ["DeAndre Hopkins", "Vileplume"],
+  ["Keenan Allen", "Machamp"],
   ["Adrian Peterson", "Rapidash"],
-  ["Le'Veon Bell", "Venusaur"],
+  ["Le['’]Veon Bell", "Venusaur"],
   ["Brandon Marshall", "Electabuzz"],
   ["Allen Robinson", "Raichu"],
   ["Brandin Cooks", "Cloyster"],
@@ -132,7 +130,7 @@ var pokemon_replacements = [
   ["Rishard Matthews", "Meowth"],
   ["Michael Thomas", "Cubone"],
   ["Jay Ajayi", "Voltorb"],
-  ["Virgil Green", "Spearow", ["Green(?! Bay)"]],
+  ["Virgil Green", "Spearow", "V\. Green", ["Green(?! Bay)"]],
   ["Matt Ryan", "Nidoran♀"],
   ["Tajae Sharpe", "Jigglypuff"],
   ["Steve Smith", "Pidgey"],
@@ -149,7 +147,7 @@ var pokemon_replacements = [
 ];
 
 var missingno_replacements = [
-  ["DeAndre Washington", ["Washington(?! Redskins)"]],
+  ["DeAndre Washington", "D\. Washington", ["Washington(?! Redskins)"]],
   ["Will Fuller"],
   ["Anquan Boldin"],
   ["Ryan Tannehill"],
@@ -178,11 +176,11 @@ var missingno_replacements = [
   ["Alex Smith"],
   ["Jay Cutler"],
   ["Brandon LaFell"],
-  //["Dorial Green-Beckham"],
+  ["Dorial Green-Beckham"],
   ["Dion Lewis"],
   ["Robert Woods"],
   ["Jaelen Strong"],
-  ["Ladarius Green", ["Green(?! Bay)"]],
+  ["Ladarius Green", "L\. Green", ["Green(?! Bay)"]],
   ["C\.? ?J\.? Prosise"],
   ["Breshad Perriman"],
   ["Josh Ferguson"],
@@ -208,7 +206,7 @@ var missingno_replacements = [
   ["Steven Hauschka"],
 ];
 
-var team_replacements = [
+/*var team_replacements = [
   ["Ravens", "Zubats"],
   ["Bengals", "Arcanines"],
   ["Browns", "Digletts"],
@@ -241,7 +239,7 @@ var team_replacements = [
   ["Rams", "Rhyhorns"],
   ["49ers", "Venomoths"],
   ["Seahawks", "Gyaradoses"],
-];
+];*/
 
 function buildRegExp(str)
 {
@@ -254,9 +252,9 @@ for (var i = 0; i < pokemon_replacements.length; i++)
 {
   var alts = [];
   
-  if (pokemon_replacements[i].length > 2)
+  if (pokemon_replacements[i].length > 3)
   { 
-    alts = pokemon_replacements[i][2];
+    alts = pokemon_replacements[i][3];
   }
   else
   {
@@ -270,9 +268,9 @@ for (var i = 0; i < missingno_replacements.length; i++)
 {
   var alts = [];
   
-  if (missingno_replacements[i].length > 1)
+  if (missingno_replacements[i].length > 2)
   { 
-    alts = missingno_replacements[i][1];
+    alts = missingno_replacements[i][2];
   }
   else
   {
@@ -287,42 +285,37 @@ for (var i = 0; i < missingno_replacements.length; i++)
   replacements.push([buildRegExp(team_replacements[i][0]), team_replacements[i][1]]);
 }*/
 
-/*// pokemon alts
+// pokemon alts
 for (var i = 0; i < pokemon_replacements.length; i++)
 { 
-  var alts = [];
-  
+  var alt = "";
   if (pokemon_replacements[i].length > 2)
   { 
-    alts = pokemon_replacements[i][2];
+    alt = pokemon_replacements[i][2];
   }
   else
   {
-    alts = pokemon_replacements[i][0].split(" ").splice(-1);
+    var split = pokemon_replacements[i][0].split(" ");
+    alt = split[0].charAt(0) + "\\. " + split.splice(-1);
   }
-  for (var j = 0; j < alts.length; j++)
-  {
-    replacements.push([buildRegExp(alts[j]), pokemon_replacements[i][1]]);
-  }
+  replacements.push([buildRegExp(alt), pokemon_replacements[i][1]]);
 }
 
 // missingno alts
 for (var i = 0; i < missingno_replacements.length; i++)
 {  
-  var alts = [];
-  
+  var alt = "";
   if (missingno_replacements[i].length > 1)
   { 
-    alts = missingno_replacements[i][1];
+    alt = missingno_replacements[i][1];
   }
   else
   {
-    alts = missingno_replacements[i][0].split(" ").splice(-1);
+    var split = missingno_replacements[i][0].split(" ");
+    alt = [split[0].charAt(0) + "\\. " + split.splice(-1)];
   }
-  for (var j = 0; j < alts.length; j++)
-  {
-    replacements.push([buildRegExp(alts[j]), "MissingNo."]);
-  } 
-}*/
+  replacements.push([buildRegExp(alt), "MissingNo."]);
+
+}
 
 //console.log(replacements);

@@ -24,7 +24,7 @@ function walk(node)
   switch ( node.nodeType )  
   {
     case 1:  // Element
-      if (node.tagName.toLowerCase() == "input" || node.tagName.toLowerCase() == "textarea" ||
+      if (node.tagName.toLowerCase() == "script" || node.tagName.toLowerCase() == "input" || node.tagName.toLowerCase() == "textarea" ||
           node.classList.contains("ace_editor"))
       {
         return;
@@ -48,21 +48,29 @@ function walk(node)
 
 function handleText(textNode) 
 {
+  if (textNode.parentNode.tagName.toLowerCase() == "script")
+  {
+    return;
+  }
+  
   var v = textNode.nodeValue;
   
   for (var i = 0; i < replacements.length; i++)
   {
     var rv = v.replace(replacements[i][0], replacements[i][1]);
-    if (rv != v && replacements[i][3] == 1)
+    if (rv != v)
     {
-      replacements[i][3] = 0;
-      var alts = replacements[i][2];
-      for (var j = 0; j < alts.length; j++)
+      if (replacements[i][3] == 1)
       {
-        replacements.push([buildRegExp(alts[j]), replacements[i][1], [], 0]);
-      }
+        replacements[i][3] = 0;
+        var alts = replacements[i][2];
+        for (var j = 0; j < alts.length; j++)
+        {
+          replacements.push([buildRegExp(alts[j]), replacements[i][1], [], 0]);
+        }
+      }      
+      v = rv;
     }
-    v = rv;
   }
   textNode.nodeValue = v;
 }
